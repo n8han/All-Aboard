@@ -14,7 +14,7 @@ object Polling extends Thread {
       )
       Broadcast.write(prior -- latest)
       prior = latest
-      Thread.sleep(5000)
+      Thread.sleep(10000)
     }
   }
 }
