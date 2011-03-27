@@ -7,7 +7,7 @@ import org.jboss.netty.channel.group.{DefaultChannelGroup, ChannelGroupFuture}
 import org.jboss.netty.handler.codec.http.{HttpHeaders, DefaultHttpChunk,
                                            DefaultHttpChunkTrailer}
 import org.jboss.netty.buffer.ChannelBuffers
-
+import util.control.Exception.allCatch
 
 /** unfiltered plan */
 class App extends unfiltered.netty.channel.Plan {
@@ -36,8 +36,11 @@ class App extends unfiltered.netty.channel.Plan {
 /** embedded server */
 object Server {
   def main(args: Array[String]) {
+    val port = args.headOption.flatMap(arg =>
+      allCatch.opt(arg.toInt)
+    ).getOrElse(7979)
     Polling.start()
-    unfiltered.netty.Http(8080)
+    unfiltered.netty.Http(port)
       .handler(new App)
       .beforeStop {
         Polling.finish()
