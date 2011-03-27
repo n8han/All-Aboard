@@ -22,10 +22,11 @@ class App extends unfiltered.netty.channel.Plan {
     JsonContent
 
   def intent = {
-    case req @ GET(Path(Seg("nyp" :: Nil))) =>
+    case req @ GET(Path(Seg("ny" :: Nil))) =>
       val ch = req.underlying.event.getChannel
       val initial = req.underlying.defaultResponse(ChunkedJson)
       ch.write(initial).addListener { () =>
+        ch.write(Broadcast.chunk(Polling.departures))
         Broadcast.clients.add(ch)
         ()
       }
