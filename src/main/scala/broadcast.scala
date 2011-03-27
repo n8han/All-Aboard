@@ -11,12 +11,13 @@ object Broadcast {
 
   def chunk(departures: Set[DepartureVision.Departure]) = {
     import net.liftweb.json._
-    import net.liftweb.json.Serialization.write
 
     implicit val formats = Serialization.formats(NoTypeHints)
     new DefaultHttpChunk(
       ChannelBuffers.copiedBuffer(
-        (Serialization.write(departures) + "\n").getBytes("utf-8")
+        departures.map(
+          Serialization.write(_)
+        ).mkString("","\n","\n").getBytes("utf-8")
       )
     )
   }
