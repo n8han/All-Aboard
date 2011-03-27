@@ -9,13 +9,17 @@ import com.gent.departurevision.DepartureVision
 object Broadcast {
   val clients = new DefaultChannelGroup
 
-  def chunk(departures: Set[DepartureVision.Departure]) =
+  def chunk(departures: Set[DepartureVision.Departure]) = {
+    import net.liftweb.json._
+    import net.liftweb.json.Serialization.write
+
+    implicit val formats = Serialization.formats(NoTypeHints)
     new DefaultHttpChunk(
       ChannelBuffers.copiedBuffer(
-        (departures.toString + "\n").getBytes("utf-8")
+        (Serialization.write(departures) + "\n").getBytes("utf-8")
       )
     )
-
+  }
   def write(departures: Set[DepartureVision.Departure]) {
     if (!departures.isEmpty) clients.write(chunk(departures))
   }

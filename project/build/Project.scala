@@ -6,6 +6,8 @@ class Project(info: ProjectInfo) extends DefaultProject(info) {
   // unfiltered
   lazy val ufj = "net.databinder" %% "unfiltered-netty" % uf_version
 
+  lazy val lift_json = "net.liftweb" %% "lift-json" % "2.2"
+
   // netty dependencies
   lazy val jboss = "JBoss repository" at 
     "http://repository.jboss.org/maven2"
