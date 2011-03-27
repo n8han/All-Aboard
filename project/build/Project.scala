@@ -1,6 +1,7 @@
 import sbt._
 
-class Project(info: ProjectInfo) extends DefaultProject(info) {
+class Project(info: ProjectInfo) extends DefaultProject(info) 
+    with assembly.AssemblyBuilder {
   val uf_version = "0.3.2"
   
   // unfiltered
