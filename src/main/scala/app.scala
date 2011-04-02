@@ -1,7 +1,6 @@
 package allaboard
 
 import unfiltered.request._
-import unfiltered.response._
 
 import util.control.Exception.allCatch
 
@@ -19,11 +18,10 @@ object Server {
     val port = args.headOption.flatMap(arg =>
       allCatch.opt(arg.toInt)
     ).getOrElse(7979)
+
     unfiltered.netty.Http(port)
       .handler(new App)
-      .beforeStop {
-        Stream.stop()
-      }
+      .beforeStop { Stream.stop() }
       .run()
   }
 }
