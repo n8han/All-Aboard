@@ -4,26 +4,35 @@ import org.jboss.netty.channel.group.{DefaultChannelGroup, ChannelGroupFuture}
 import org.jboss.netty.handler.codec.http.{HttpHeaders, DefaultHttpChunk,
                                            DefaultHttpChunkTrailer}
 import org.jboss.netty.buffer.ChannelBuffers
+import util.control.Exception.allCatch
 import com.gent.departurevision.DepartureVision
 import unfiltered.{request,response,netty}
 import response._
 
 class Stream(station: String) extends Thread {
   import Stream._
-  @volatile private var prior = Set.empty[DepartureVision.Departure]
+  val empty = Set.empty[DepartureVision.Departure]
+  @volatile private var prior = empty
   private val clients = new DefaultChannelGroup
   override def run() {
     while (!plsfinish) {
-      val latest = DepartureVision.departures(station)(
-        Set.empty[DepartureVision.Departure] ++ _
-      )
-      Chunker(prior -- latest)(clients.write)
-      prior = latest
+      if (!clients.isEmpty()) {
+        val latest = allCatch.either { 
+          DepartureVision.departures(station){ empty ++ _ }
+        }.fold({ e => 
+          println("Exception on station %s: %s".format(station, e.getMessage))
+          empty
+        }, identity)
+        Chunker(latest -- prior)(clients.write)
+        prior = latest
+      } else {
+        prior = Set.empty
+      }
       Thread.sleep(10000)
     }
     clients.write(
       new DefaultHttpChunkTrailer
-    ).awaitUninterruptibly()
+    ).await()
   }
   def add(req: request.HttpRequest[netty.ReceivedMessage]) {
     val ch = req.underlying.event.getChannel
@@ -32,6 +41,7 @@ class Stream(station: String) extends Thread {
       Chunker(prior)(ch.write)
       clients.add(ch)
     }
+    if (!isAlive) start()
   }
 }
 

@@ -21,7 +21,10 @@ object Server {
 
     unfiltered.netty.Http(port)
       .handler(new App)
-      .beforeStop { Stream.stop() }
+      .beforeStop { 
+        println("Waiting for all streams to finish...")
+        Stream.stop()
+      }
       .run()
   }
 }
