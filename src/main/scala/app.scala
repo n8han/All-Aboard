@@ -7,7 +7,7 @@ import util.control.Exception.allCatch
 /** unfiltered plan */
 class App extends unfiltered.netty.channel.Plan {
   def intent = {
-    case req @ GET(Path(Seg(station :: Nil))) =>
+    case req @ GET(Path(Seg(Station(station) :: Nil))) =>
       Stream(station).add(req)
   }
 }
