@@ -37,9 +37,13 @@ object DepartureVision {
            El(_, "td", _, _,
              El(_, "font", _, _, Text(status))
            )
-         ) => (track.replace("&nbsp;","").trim(), status.trim())
+         ) => (track.replace("&nbsp;","").replace("Track","").trim(), status.trim())
       }
-      Some(Departure(departs, train, dest, line, track, status))
+
+	  val massagedTrack = if(track.length==0) null else track
+	  val massagedStatus = if(status.length==0) null else status
+	    
+      Some(Departure(departs, train, dest, line, massagedTrack, massagedStatus))
     }
   }
 
