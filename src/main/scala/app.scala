@@ -7,7 +7,11 @@ import util.control.Exception.allCatch
 /** unfiltered plan */
 class App extends unfiltered.netty.channel.Plan {
   def intent = {
-    case req @ GET(Path(Seg(Station(station) :: Nil))) =>
+    case req @ GET(Path(Seg(station :: Nil))) =>
+      req.underlying.respond(
+        unfiltered.response.Redirect("/njt/" + station)
+      )
+    case req @ GET(Path(Seg("njt" :: Station(station) :: Nil))) =>
       Stream(station).add(req)
   }
 }
