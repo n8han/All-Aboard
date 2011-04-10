@@ -8,6 +8,7 @@ class Project(info: ProjectInfo) extends DefaultProject(info)
   lazy val ufj = "net.databinder" %% "unfiltered-netty" % uf_version
 
   lazy val lift_json = "net.liftweb" %% "lift-json" % "2.2"
+  lazy val joda = "org.scala-tools.time" %% "time" % "0.3"
 
   // netty dependencies
   lazy val jboss = "JBoss repository" at 

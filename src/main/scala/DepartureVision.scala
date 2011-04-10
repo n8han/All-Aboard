@@ -3,7 +3,7 @@ package com.gent.departurevision
 object DepartureVision {
 
   /** represents logical unit of data */
-  case class Departure(departs: String, train: String, dest: String,
+  case class Departure(departs: Long, train: String, dest: String,
                        line: String, track: String, status: String)
 
   /** xml extractor */
@@ -40,10 +40,19 @@ object DepartureVision {
          ) => (track.replace("&nbsp;","").replace("Track","").trim(), status.trim())
       }
 
-	  val massagedTrack = if(track.length==0) null else track
-	  val massagedStatus = if(status.length==0) null else status
-	    
-      Some(Departure(departs, train, dest, line, massagedTrack, massagedStatus))
+      val massagedTrack = if(track.length==0) null else track
+      val massagedStatus = if(status.length==0) null else status
+      
+      val date = departs.split(":").map { _.toInt } match {
+        case Array(hour, minute) => allaboard.Time.guess(hour, minute)
+      }
+
+      Some(Departure(date.getTime, 
+                     train, 
+                     dest, 
+                     line, 
+                     massagedTrack, 
+                     massagedStatus))
     }
   }
 
