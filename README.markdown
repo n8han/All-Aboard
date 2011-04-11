@@ -9,7 +9,7 @@ have [sbt installed][sbt]. Then, form the project directory:
 This will display a message if the server starts successfully. In a
 second terminal window:
 
-    curl -i http://technically.us:7979/njt/ny
+    curl -i http://127.0.0.1:7979/njt/ny
 
 You should see NJ Transit and Amtrak departures from Penn Station,
 with changes (delays, boarding, etc) streamed out within ten seconds
