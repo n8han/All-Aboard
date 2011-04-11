@@ -1,7 +1,14 @@
-Get on the train:
+This is a streaming server that lazily polls train status services and
+broadcasts updates out to any listeners. To try it, you'll need
+Scala's sbt. Then, form the project directory:
 
-    curl -i http://technically.us:7979/ny
+    $ sbt update run
 
-That would be NJ Transit and Amtrak departures from Penn Station, with changes (delays, boarding, etc) streamed out within ten seconds of them being posted to NJ Transit's departures page.
+This will display a message if the server starts successfully. In a
+second terminal window:
 
-Note: the API is not yet stable or complete. But check it out!
+    curl -i http://technically.us:7979/njt/ny
+
+You should see NJ Transit and Amtrak departures from Penn Station,
+with changes (delays, boarding, etc) streamed out within ten seconds
+of them being posted to NJ Transit's departures page.
