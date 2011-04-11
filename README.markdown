@@ -1,6 +1,8 @@
 This is a streaming server that lazily polls train status services and
-broadcasts updates out to any listeners. To try it, you'll need
-Scala's sbt. Then, form the project directory:
+broadcasts updates out to any listeners. To try it, you'll need to
+have [sbt installed][sbt]. Then, form the project directory:
+
+[sbt]: http://code.google.com/p/simple-build-tool/wiki/Setup
 
     $ sbt update run
 
